@@ -58,16 +58,16 @@ At `/admin`, under `Oauth2_Provider`, add a new `Application` with the following
 
     Client ID: auto-generated
     User: set to an admin user
-    Redirect uris: the consumer's login endpoint, e.g. `/auth/oauth/login/` relative to a Moodle's `wwwroot`
-    Client type: *Confidential*
-    Authorization grant type: *Authorization code*
+    Redirect uris: the consumer's login endpoint, e.g. /auth/oauth/login/ relative to a Moodle's wwwroot
+    Client type: Confidential
+    Authorization grant type: Authorization code
     Client secret: auto-generated
     Name: an arbitrary name
 
 At `/admin`, under `Into_Oauth`, add a new `Oauth sign outs` with the following fields:
 
-    Application: matching the arbitrary name of the above
-    Signout uri: the consumer's logout endpoint, e.g. `/auth/oauth/logout/` relative to a Moodle's `wwwroot`
+    Application: set to the arbitrary name of the above Application
+    Signout uri: the consumer's logout endpoint, e.g. /auth/oauth/logout/ relative to a Moodle's wwwroot
 
 ## Tests
 
