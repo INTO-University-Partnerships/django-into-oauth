@@ -1,7 +1,6 @@
 import json
 
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse
 from django.contrib.auth import logout
 from django.conf import settings
 
@@ -37,7 +36,6 @@ class AuthorizationView(AuthorizationView):
 
 class UserDataView(ProtectedResourceView):
     def get(self, request, *args, **kwargs):
-
         fields = settings.INTO_OAUTH_USERDATA
 
         userdata = {}
@@ -46,22 +44,25 @@ class UserDataView(ProtectedResourceView):
 
         return HttpResponse(
             json.dumps(userdata, ensure_ascii=False),
-            content_type='application/json')
+            content_type='application/json'
+        )
 
 
 def oauth2_logout(request):
-    # client ID optionally passed from consumer app
-    # on which the user has logged out
+    # client ID optionally passed from consumer app on which the user has logged out
     client_id = request.GET.get('client_id', '')
+
     # all applications that require sign-out
     signouts = OauthSignOut.objects.all().order_by('id')
     if client_id:
         current = signouts.get(application__client_id=client_id)
         signouts = signouts.filter(id__gt=current.id)
-    # redirect to the next app requiring single-sign-out
+
+    # redirect to the next app requiring single sign-out
     if signouts.exists():
         redirect = signouts.first().signout_uri
         return HttpResponseRedirect(redirect)
+
     # otherwise, just log out of Django
     logout(request)
     return HttpResponseRedirect(settings.LOGIN_URL)

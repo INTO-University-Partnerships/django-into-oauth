@@ -20,15 +20,18 @@ UserModel = get_user_model()
 @skipIfCustomUser
 class UserDataViewTestCase(TestCase):
 
-    email = 'rob.pickering@into.uk.com'
-    first_name = 'Rob'
-    last_name = 'Pickering'
-    username = 'robologo'
+    email = 'mike.mcgowan@into.uk.com'
+    first_name = 'Mike'
+    last_name = 'McGowan'
+    username = 'Misiek'
 
     def setUp(self):
         self.user = UserModel.objects.create_user(
-            self.username, email=self.email,
-            first_name=self.first_name, last_name=self.last_name)
+            username=self.username,
+            email=self.email,
+            first_name=self.first_name,
+            last_name=self.last_name
+        )
         self.user.is_active = True
         self.user.save()
         self.factory = RequestFactory()
@@ -72,10 +75,13 @@ class AuthorizationViewTestCase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.test_user = UserModel.objects.create_user(
-            "test_user", "test@user.com", "123456")
+            'test_user',
+            'test@user.com',
+            '123456'
+        )
 
         self.application = Application(
-            name="Test Into Application",
+            name='Test Into Application',
             redirect_uris="http://localhost",
             user=self.test_user,
             client_type=Application.CLIENT_CONFIDENTIAL,
@@ -114,19 +120,21 @@ class LogoutViewTestCase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.test_user = UserModel.objects.create_user(
-            "test_user", "test@user.com", "123456")
+            'test_user',
+            'test@user.com',
+            '123456'
+        )
         self.application1 = Application(
-            name="Test Into Application",
-            redirect_uris="http://localhost",
+            name='Test Into Application',
+            redirect_uris='http://localhost',
             user=self.test_user,
             client_type=Application.CLIENT_CONFIDENTIAL,
             authorization_grant_type=Application.GRANT_AUTHORIZATION_CODE,
             client_id='test_client_id_1'
         )
-
         self.application2 = Application(
-            name="Test Into Application 2",
-            redirect_uris="http://localhost/app2",
+            name='Test Into Application 2',
+            redirect_uris='http://localhost/app2',
             user=self.test_user,
             client_type=Application.CLIENT_CONFIDENTIAL,
             authorization_grant_type=Application.GRANT_AUTHORIZATION_CODE,
@@ -136,10 +144,12 @@ class LogoutViewTestCase(TestCase):
         self.application2.save()
         self.signout1 = OauthSignOut.objects.create(
             application_id=self.application1.id,
-            signout_uri='http://consumer-logout.uri')
+            signout_uri='http://consumer-logout.uri'
+        )
         self.signout2 = OauthSignOut.objects.create(
             application_id=self.application2.id,
-            signout_uri='http://consumer-logout2.uri')
+            signout_uri='http://consumer-logout2.uri'
+        )
         self.signout1.save()
         self.signout2.save()
 
@@ -151,21 +161,21 @@ class LogoutViewTestCase(TestCase):
         self.test_user.delete()
 
     def test_logout(self):
-        response = self.client.get(
-            reverse('oauth2_provider:oauth2_logout'))
+        response = self.client.get(reverse('oauth2_provider:oauth2_logout'))
         self.assertEquals(self.signout1.signout_uri, response.url)
         self.assertEquals(302, response.status_code)
 
     def test_logout_app1(self):
         response = self.client.get(
             reverse('oauth2_provider:oauth2_logout'),
-            {'client_id': self.application1.client_id})
+            {'client_id': self.application1.client_id}
+        )
         self.assertEquals(self.signout2.signout_uri, response.url)
         self.assertEquals(302, response.status_code)
 
     def test_logout_app2(self):
         response = self.client.get(
             reverse('oauth2_provider:oauth2_logout'),
-            {'client_id': self.application2.client_id})
-        self.assertRedirects(
-            response, settings.LOGIN_URL)
+            {'client_id': self.application2.client_id}
+        )
+        self.assertRedirects(response, settings.LOGIN_URL)
