@@ -1,6 +1,6 @@
 # Django INTO OAuth
 
-A Django app that allows Django to act as an OAuth [IdP](http://en.wikipedia.org/wiki/Identity_provider).
+A Django app that allows Django to act as an OAuth [IdP](http://en.wikipedia.org/wiki/Identity_provider) (e.g. to a [Moodle consumer](https://github.com/INTO-University-Partnerships/auth-oauth)).
 
 Commands are relative to the directory in which Django is installed.
 
@@ -32,10 +32,10 @@ In `settings.py`, add the following to `MIDDLEWARE_CLASSES`:
 In `settings.py`, add the following:
 
     INTO_OAUTH_USERDATA = {
-        'username': 'username',
-        'email': 'email',
+        'username':   'username',
+        'email':      'email',
         'first_name': 'first_name',
-        'last_name': 'last_name'
+        'last_name':  'last_name'
     }
 
     OAUTH2_PROVIDER_APPLICATION_MODEL = 'oauth2_provider.Application'
@@ -56,13 +56,13 @@ Login to the Django admin.
 
 At `/admin`, under `Oauth2_Provider`, add a new `Application` with the following fields:
 
-    Client ID: auto-generated
-    User: set to an admin user
-    Redirect uris: the consumer's login endpoint, e.g. /auth/oauth/login/ relative to a Moodle's wwwroot
-    Client type: Confidential
+    Client ID:                auto-generated
+    User:                     set to an admin user
+    Redirect uris:            the consumer's login endpoint, e.g. /auth/oauth/login/ relative to a Moodle's wwwroot
+    Client type:              Confidential
     Authorization grant type: Authorization code
-    Client secret: auto-generated
-    Name: an arbitrary name
+    Client secret:            auto-generated
+    Name:                     an arbitrary name
 
 At `/admin`, under `Into_Oauth`, add a new `Oauth sign outs` with the following fields:
 
